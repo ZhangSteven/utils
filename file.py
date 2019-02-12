@@ -2,6 +2,7 @@
 # 
 from os import listdir
 from os.path import isfile, isdir, join
+import ntpath
 
 
 
@@ -23,6 +24,19 @@ def getSubFolders(directory):
 	"""
 	return [f for f in listdir(directory) if isdir(join(directory, f))]
 
+
+
+def stripPath(file):
+	"""
+	[String] file name (with or without full path) => [String] file name 
+		without path
+
+	The code snippet comes from:
+
+	https://stackoverflow.com/a/8384788/3331297
+	"""
+    head, tail = ntpath.split(path)
+    return tail
 
 
 
