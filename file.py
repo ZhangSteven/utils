@@ -35,8 +35,8 @@ def stripPath(file):
 
 	https://stackoverflow.com/a/8384788/3331297
 	"""
-    head, tail = ntpath.split(path)
-    return tail
+	head, tail = ntpath.split(file)
+	return tail
 
 
 
