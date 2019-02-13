@@ -1,6 +1,8 @@
 # coding=utf-8
 # 
-# Some of the functions to use with iterators or list processing.
+# Utility functions to use with iterators or list processing.
+#
+# More useful functions can be found in python3 itertools package.
 # 
 
 def head(it):
