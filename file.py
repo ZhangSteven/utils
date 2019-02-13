@@ -6,13 +6,19 @@ import ntpath
 
 
 
-def getFiles(directory):
+def getFiles(directory, withDir=None):
 	"""
-	[String] directory => [List] file names under that directory
+	[String] directory, [Bool] withDir => [List] file names under that 
+		directory. Sub folders are not included.
 
-	sub folders are not included
+	if the function is called without the second parameter 'withDir', then 
+	file names are without directory, otherwise full path file names are 
+	returned.
 	"""
-	return [f for f in listdir(directory) if isfile(join(directory, f))]
+	if withDir == None:
+		return [f for f in listdir(directory) if isfile(join(directory, f))]
+	else:
+		return [join(directory, f) for f in listdir(directory) if isfile(join(directory, f))]
 
 
 
