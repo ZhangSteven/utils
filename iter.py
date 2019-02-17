@@ -9,7 +9,8 @@ def head(it):
 	"""
 	[Iterable] it => [Object] first element in it, if empty return None
 	
-	This function is not a pure function, because it consumes the iterator.
+	This function is not pure, because it changes the input, i.e., consumes 
+	the iterator.
 	"""
 	for x in it:
 		return x
@@ -22,12 +23,14 @@ def numElements(it):
 	"""
 	[Iterable] it => [Integral] number of elements in an interable (it).
 	
-	This function is not a pure function, because it consumes the iterator.
-
+	This function is not pure, because it changes the input, i.e., consumes 
+	the iterator.
+	
 	The idea comes from:
 	https://stackoverflow.com/questions/3345785/getting-number-of-elements-in-an-iterator-in-python
 	"""
-	return sum([1 for _ in it])
+	# return sum([1 for _ in it])
+	return sum(map(lambda _: 1, it))
 
 
 
