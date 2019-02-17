@@ -2,36 +2,97 @@
 # 
 
 import unittest2
-from utils.iter import head, numElements
+import xml.etree.ElementTree as ET
+from utils.xml4me import stripNamespace \
+                         , findAllWithoutNamespace \
+                         , findWithoutNamespace
+from utils.utility import currentDir
+from os.path import join
 
 
 
-class TestIter(unittest2.TestCase):
+class TestTrade(unittest2.TestCase):
 
     def __init__(self, *args, **kwargs):
-        super(TestIter, self).__init__(*args, **kwargs)
-
-    def testHead(self):
-        r = range(10)
-        self.assertEqual(0, head(r))
-        self.assertEqual(0, head(r))    # a range object NOT consumed like
-                                        # normail iterable
-
-        r2 = map(lambda x: 2*x, r)
-        self.assertEqual(0, head(r2))
-        self.assertEqual(2, head(r2))   # the iterator (map object) consumed
+        super(TestTrade, self).__init__(*args, **kwargs)
 
 
 
-    def testNumElements(self):
-        self.assertEqual(0, numElements([]))
+    def getRoot(self, file):
+        """
+        Get root element of an XML tree
+        """
+        tree = ET.parse(file)
+        root = tree.getroot()
+        return root
 
-        r = range(10)
-        self.assertEqual(10, numElements(r))
-        self.assertEqual(10, numElements(r))    # range object, like a list,
-                                                # not consumed
 
-        r2 = map(lambda x: 2*x, r)
-        self.assertEqual(10, numElements(r2))
-        self.assertEqual(0, numElements(r2))    # the iterator (map object) 
-                                                # consumed
+
+    def testStripNamespace(self):
+        file = join(currentDir(), 'samples', 'test1.xml')
+        tag = self.getRoot(file).tag
+
+        # {http://www.advent.com/SchemaRevLevel758/Geneva}GenevaLoader
+        # print(tag)
+        self.assertEqual(stripNamespace(tag), 'GenevaLoader')
+
+
+
+    def testStripNamespace2(self):
+        # This file has no xmlns element
+        file = join(currentDir(), 'samples', 'test2.xml')
+        tag = self.getRoot(file).tag
+
+        # GenevaLoader
+        # print(tag)
+        self.assertEqual(stripNamespace(tag), 'GenevaLoader')
+
+
+
+    def testFindAllWithoutNamespace(self):
+        # Find all the "Buy_New" nodes
+        file = join(currentDir(), 'samples', 'test1.xml')
+        transactionsNode = self.getRoot(file)[0]
+        nodes = findAllWithoutNamespace( transactionsNode \
+                                       , 'Buy_New')
+        self.assertEqual(sorted(map(portfolioId, nodes)) \
+                        , ['19437', '20051', '30001', '40006-D'])
+
+
+
+    def testFindWithoutNamespace(self):
+        # Find the first "SellShort_New" sub element
+        file = join(currentDir(), 'samples', 'test1.xml')
+        transactionsNode = self.getRoot(file)[0]
+        self.assertEqual(portfolioId(findWithoutNamespace(transactionsNode \
+                                                         , 'SellShort_New')) \
+                        , '40006-C')
+
+
+
+    def testFindWithoutNamespace2(self):
+        # If not found, it will return None
+        file = join(currentDir(), 'samples', 'test1.xml')
+        transactionsNode = self.getRoot(file)[0]
+        self.assertEqual(findWithoutNamespace(transactionsNode, 'xxx'), None)
+
+
+
+
+def portfolioId(node):
+    """
+    [ET node] node => [String] portfolio id
+
+    A node that contains a <Portfolio> sub node looks like:
+
+    <Buy_New>
+        <Portfolio>30001</Portfolio>
+        <KeyValue>000001</KeyValue>
+        ...
+    </Buy_New>
+    """
+    for subElement in node:
+        if stripNamespace(subElement.tag) == 'Portfolio':
+            return subElement.text
+
+    return ''   # the default
