@@ -2,6 +2,25 @@
 # 
 
 import csv, os
+from datetime import datetime, timedelta
+
+
+
+def fromExcelOrdinal(ordinal, _epoch0=datetime(1899, 12, 31)):
+	"""
+	[Float] ordinal => [Datetime] date
+
+	In Excel, an date is represented by a float number (ordinal), where the
+	integral part represents the date and the decimal part represents the time
+	of that day. This function converts that number to a python datetime object.
+
+	Code sample comes from:
+
+	https://stackoverflow.com/questions/29387137/how-to-convert-a-given-ordinal-number-from-excel-to-a-date
+	"""
+	if ordinal > 59:
+		ordinal -= 1
+	return (_epoch0 + timedelta(days=ordinal)).replace(microsecond=0)
 
 
 

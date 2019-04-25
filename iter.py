@@ -34,6 +34,29 @@ def numElements(it):
 
 
 
+def compose(*funcs):
+	"""
+	[List] list of functions => [Function Object] a new function that is the
+		compose of all the functions.
+
+	compose(f, g, ...)(x) = f(g(...(x)))
+
+	The code come from "Function Programming in Python", Chapter 4.
+
+	There are some other libraries that contain a similar function.
+	"""
+	def inner(data, func=funcs):
+		result = data
+		for f in reversed(funcs):
+			result = f(result)
+
+		return result
+
+	return inner
+
+
+
+
 if __name__ == '__main__':
 	pass
 
