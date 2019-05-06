@@ -24,9 +24,9 @@ def fromExcelOrdinal(ordinal, _epoch0=datetime(1899, 12, 31)):
 
 
 
-def writeCsv(fileName, rows):
+def writeCsv(fileName, rows, delimiter=','):
 	with open(fileName, 'w', newline='') as csvfile:
-		file_writer = csv.writer(csvfile)
+		file_writer = csv.writer(csvfile, delimiter=delimiter)
 		for row in rows:
 			file_writer.writerow(row)
 
