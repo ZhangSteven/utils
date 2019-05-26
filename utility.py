@@ -3,6 +3,8 @@
 
 import csv, os
 from datetime import datetime, timedelta
+from functools import partial
+from operator import getitem
 
 
 
