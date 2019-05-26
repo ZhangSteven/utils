@@ -41,3 +41,13 @@ def currentDir():
 	http://stackoverflow.com/questions/3430372/how-to-get-full-path-of-current-files-directory-in-python
 	"""
 	return os.path.dirname(os.path.abspath(__file__))
+
+
+
+def dictToValues(keys, d):
+	"""
+	[List] keys, [Dictionary] d => [Iterator] values
+
+	retrieve the list of values corresponding to the keys from the dictionary.
+	"""
+	return map(partial(getitem, d), keys)
