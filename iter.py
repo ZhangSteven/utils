@@ -9,7 +9,7 @@ def head(it):
 	"""
 	[Iterable] it => [Object] first element in it, if empty return None
 	
-	This function is not pure, because it changes the input, i.e., consumes 
+	This function is NOT pure, because it changes the input, i.e., consumes 
 	the iterator.
 	"""
 	for x in it:
