@@ -4,18 +4,33 @@
 #
 # More useful functions can be found in python3 itertools package.
 # 
+from itertools import dropwhile
+
+
 
 def head(it):
 	"""
-	[Iterable] it => [Object] first element in it, if empty return None
-	
-	This function is NOT pure, because it changes the input, i.e., consumes 
-	the iterator.
+	Non-pure function (it consumes the iterator)
+
+	[Iterable] it => [Object] first element in it, if empty return None.
 	"""
 	for x in it:
 		return x
 
 	return None
+
+
+
+def firstOf(condition, it):
+	"""
+	Non-pure function (it consumes the iterator)
+
+	[Iterable] it, [Function] condition => [Object] first element in it that
+		satisfies the condition, return None if no such elements or list is
+		empty.
+	"""
+	notSatisfyCondition = lambda x: False if condition(x) else True
+	return head(dropwhile(notSatisfyCondition, it))
 
 
 

@@ -2,7 +2,7 @@
 # 
 
 import unittest2
-from utils.iter import head, numElements
+from utils.iter import head, numElements, firstOf
 
 
 
@@ -35,3 +35,17 @@ class TestIter(unittest2.TestCase):
         self.assertEqual(10, numElements(r2))
         self.assertEqual(0, numElements(r2))    # the iterator (map object) 
                                                 # consumed
+
+
+
+    def testFirstOf(self):
+        condition = lambda x: x > 4
+
+        L = []
+        self.assertEqual(None, firstOf(condition, L))
+
+        L = [1, 3, 5, 2, 6, 3]
+        self.assertEqual(5, firstOf(condition, L))
+
+        L = [1, 2, 3]   # non of the items satifies
+        self.assertEqual(None, firstOf(condition, L))
