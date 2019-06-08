@@ -2,7 +2,7 @@
 # 
 
 import unittest2
-from utils.iter import head, numElements, firstOf
+from utils.iter import pop, numElements, firstOf
 
 
 
@@ -11,15 +11,15 @@ class TestIter(unittest2.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestIter, self).__init__(*args, **kwargs)
 
-    def testHead(self):
+    def testPop(self):
         r = range(10)
-        self.assertEqual(0, head(r))
-        self.assertEqual(0, head(r))    # a range object NOT consumed like
+        self.assertEqual(0, pop(r))
+        self.assertEqual(0, pop(r))    # a range object NOT consumed like
                                         # normail iterable
 
         r2 = map(lambda x: 2*x, r)
-        self.assertEqual(0, head(r2))
-        self.assertEqual(2, head(r2))   # the iterator (map object) consumed
+        self.assertEqual(0, pop(r2))
+        self.assertEqual(2, pop(r2))   # the iterator (map object) consumed
 
 
 

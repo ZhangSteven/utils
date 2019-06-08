@@ -8,7 +8,7 @@ from itertools import dropwhile
 
 
 
-def head(it):
+def pop(it):
 	"""
 	Non-pure function (it consumes the iterator)
 
@@ -18,6 +18,11 @@ def head(it):
 		return x
 
 	return None
+
+
+# To maintain backward compatibility. Previously the name was "head",
+# but a better name for the function is "pop"
+head = pop
 
 
 
@@ -30,7 +35,7 @@ def firstOf(condition, it):
 		empty.
 	"""
 	notSatisfyCondition = lambda x: False if condition(x) else True
-	return head(dropwhile(notSatisfyCondition, it))
+	return pop(dropwhile(notSatisfyCondition, it))
 
 
 
