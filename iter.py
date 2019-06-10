@@ -76,6 +76,81 @@ def compose(*funcs):
 
 
 
+def itemGroup(separator, items):
+    """
+    A mask for function _itemGroup(), to handle the special situation where
+    the input is []. In that case, _itemGroup() returns [[]], but we want
+    [], therefore the filter.
+    """
+    return filter(lambda x: x != [], _itemGroup(separator, items))
+
+
+def itemGroup2(separator, items):
+    return filter(lambda x: x != [], _itemGroup2(separator, items))
+
+
+
+def _itemGroup(separator, items):
+    """
+    A generator function, separate the list of items into a list of groups, divided
+    by a separator item.
+
+    [Function] separator, [Iterable] items => groups of items
+
+    Where separator is a function which takes an item as input and tells whether
+    an item is a separator item.
+
+    For example,
+
+    The list: [0, 1, 5, 6, 7, 5, 8, 9, 5, 2]
+    separator item: 5
+    outcome: [[0, 1], [5, 6, 7], [5, 8, 9], [5, 2]]
+
+    """
+    group = []
+
+    for item in items:
+        if separator(item):
+            yield group
+            group = [item]
+        else:
+            group.append(item)
+
+    yield group
+
+
+
+def _itemGroup2(separator, items):
+    """
+    A generator function, separate the list of items into a list of groups, divided
+    by a separator item.
+
+    [Function] separator, [Iterable] items => groups of items
+
+    The difference between this version and the itemGroup() is that it skips
+    those items at the beginning of the items list before the very first separator
+    item.
+
+    For example,
+
+    The list: [0, 1, 5, 6, 7, 5, 8, 9, 5, 2]
+    separator item: 5
+    outcome: [[5, 6, 7], [5, 8, 9], [5, 2]]
+    """
+    notSeparator = lambda x: False if separator(x) else True    # negate separator
+    group = []
+
+    for item in dropwhile(notSeparator, items):
+        if separator(item):
+            if group != []:
+                yield group
+            group = [item]
+        else:
+            group.append(item)
+
+    yield group
+
+
 
 if __name__ == '__main__':
 	pass

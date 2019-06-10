@@ -2,7 +2,7 @@
 # 
 
 import unittest2
-from utils.iter import pop, numElements, firstOf
+from utils.iter import pop, numElements, firstOf, itemGroup, itemGroup2
 
 
 
@@ -49,3 +49,29 @@ class TestIter(unittest2.TestCase):
 
         L = [1, 2, 3]   # non of the items satifies
         self.assertEqual(None, firstOf(condition, L))
+
+
+
+    def testItemGroup(self):
+        separator = lambda x: x ==5
+        self.assertEqual(list(itemGroup(separator, [])), [])
+        self.assertEqual(list(itemGroup(separator, [0, 1])), [[0, 1]])
+        self.assertEqual(list(itemGroup(separator, [0, 1, 5])), [[0, 1], [5]])
+        self.assertEqual(list(itemGroup(separator, [5, 2])), [[5, 2]])
+        self.assertEqual(list(itemGroup(separator, [0, 1, 5, 6, 7]))
+                        , [[0, 1], [5, 6, 7]])
+        self.assertEqual(list(itemGroup(separator, [0, 1, 5, 6, 7, 5, 5, 2]))
+                        , [[0, 1], [5, 6, 7], [5], [5, 2]])
+
+
+
+    def testItemGroup2(self):
+        separator = lambda x: x ==5
+        self.assertEqual(list(itemGroup2(separator, [])), [])
+        self.assertEqual(list(itemGroup2(separator, [0, 1])), [])
+        self.assertEqual(list(itemGroup2(separator, [0, 1, 5])), [[5]])
+        self.assertEqual(list(itemGroup2(separator, [5, 2])), [[5, 2]])
+        self.assertEqual(list(itemGroup2(separator, [0, 1, 5, 6, 7]))
+                        , [[5, 6, 7]])
+        self.assertEqual(list(itemGroup2(separator, [0, 1, 5, 6, 7, 5, 5, 2]))
+                        , [[5, 6, 7], [5], [5, 2]])
