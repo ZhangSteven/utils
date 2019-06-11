@@ -2,7 +2,8 @@
 # 
 
 import unittest2
-from utils.iter import pop, numElements, firstOf, itemGroup, itemGroup2
+from utils.iter import pop, numElements, firstOf, itemGroup, itemGroup2, \
+                        divide
 
 
 
@@ -75,3 +76,13 @@ class TestIter(unittest2.TestCase):
                         , [[5, 6, 7]])
         self.assertEqual(list(itemGroup2(separator, [0, 1, 5, 6, 7, 5, 5, 2]))
                         , [[5, 6, 7], [5], [5, 2]])
+
+
+
+    def testDivide(self):
+        even = lambda x : x%2 == 0
+        double = lambda x : 2*x
+        self.assertEqual(divide(even, []), ([], []))
+        self.assertEqual(divide(even, [1, 3]), ([], [1, 3]))
+        self.assertEqual(divide(even, map(double, range(3))), ([0, 2, 4], []))
+        self.assertEqual(divide(even, range(3)), ([0, 2], [1]))

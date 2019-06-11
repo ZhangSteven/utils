@@ -5,6 +5,26 @@
 # More useful functions can be found in python3 itertools package.
 # 
 from itertools import dropwhile
+from functools import reduce
+
+
+
+def divide(key, it):
+    """
+    [Iterable] it, [Function] key => [Tuple] ([List] true list, [List] others)
+    
+    Divide an iterable into 2 sub lists based on a key function.
+    """
+    def accumulate(acc, el):
+        if key(el):
+            acc[0].append(el)
+        else:
+            acc[1].append(el)
+
+        return acc
+
+
+    return reduce(accumulate, it, ([], []))
 
 
 
@@ -153,7 +173,8 @@ def _itemGroup2(separator, items):
 
 
 if __name__ == '__main__':
-	pass
+    even = lambda x: x%2 == 0
+    print(divide(even, range(5)))
 
 	
 
