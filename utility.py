@@ -26,19 +26,22 @@ def fromExcelOrdinal(ordinal, _epoch0=datetime(1899, 12, 31)):
 
 
 
-# def writeCsv(fileName, rows, delimiter=','):
-# 	with open(fileName, 'w', newline='') as csvfile:
-# 		file_writer = csv.writer(csvfile, delimiter=delimiter)
-# 		for row in rows:
-# 			file_writer.writerow(row)
-
-
-
 def writeCsv(fileName, rows, **kwargs):
+	"""
+	[String] fileName (output file name, full path),
+	[Iterable] rows (each row is a list of items),
+	[Key-Value Pairs] kwargs: such as
+
+		delimiter=',' (the default)
+		quotechar='"'\
+		quoting=csv.QUOTE_NONNUMERIC
+	"""
 	with open(fileName, 'w', newline='') as csvfile:
 		file_writer = csv.writer(csvfile, **kwargs)
 		for row in rows:
 			file_writer.writerow(row)
+
+		return fileName
 
 
 
