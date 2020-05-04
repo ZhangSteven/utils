@@ -3,8 +3,8 @@
 
 import unittest2
 from utils.iter import pop, numElements, firstOf, itemGroup, itemGroup2, \
-                        divide
-
+                        divide, divideToGroup, divideToGroupTF
+from functools import partial
 
 
 class TestIter(unittest2.TestCase):
@@ -86,3 +86,30 @@ class TestIter(unittest2.TestCase):
         self.assertEqual(divide(even, [1, 3]), ([], [1, 3]))
         self.assertEqual(divide(even, map(double, range(3))), ([0, 2, 4], []))
         self.assertEqual(divide(even, range(3)), ([0, 2], [1]))
+
+
+
+    def testdivideToGroupTF(self):
+        self.assertEqual([], divideToGroupTF([]))
+        self.assertEqual([], divideToGroupTF([0]))
+        self.assertEqual([[1]], divideToGroupTF([1]))
+        self.assertEqual([[1]], divideToGroupTF([0, 1]))
+        self.assertEqual([[1, 0]], divideToGroupTF([1, 0]))
+        self.assertEqual([[1, 0]], divideToGroupTF([0, 1, 0]))
+        self.assertEqual([[1], [1]], divideToGroupTF([1, 1]))
+        self.assertEqual([[1], [1, 0]], divideToGroupTF([0, 1, 1, 0]))
+        self.assertEqual([[1], [1, 0], [1, 0, 0]], divideToGroupTF([0, 0, 1, 1, 0, 1, 0, 0]))
+
+
+
+    def testdivideToGroup(self):
+        dg = partial(divideToGroup, lambda x: x%2 == 0)
+        self.assertEqual([], dg([]))
+        self.assertEqual([], dg([1]))
+        self.assertEqual([[2]], dg([2]))
+        self.assertEqual([[2]], dg([1, 2]))
+        self.assertEqual([[2, 3]], dg([2, 3]))
+        self.assertEqual([[2, 9]], dg([5, 2, 9]))
+        self.assertEqual([[2], [4]], dg([2, 4]))
+        self.assertEqual([[4], [2, 3]], dg([7, 4, 2, 3]))
+        self.assertEqual([[2], [4, 5], [8, 9, 7]], dg([1, 3, 2, 4, 5, 8, 9, 7]))

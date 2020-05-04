@@ -4,7 +4,7 @@
 #
 # More useful functions can be found in python3 itertools package.
 # 
-from itertools import dropwhile
+from itertools import dropwhile, chain
 from functools import reduce
 
 
@@ -76,6 +76,9 @@ def numElements(it):
 
 def compose(*funcs):
 	"""
+    This function is kept here for backward compatibility, but we should use
+    toolz.functoolz.compose instead.
+
 	[List] list of functions => [Function Object] a new function that is the
 		compose of all the functions.
 
@@ -172,9 +175,77 @@ def _itemGroup2(separator, items):
 
 
 
+def divideToGroupTF(itTF):
+    """
+    [Iterator] itTF: an iterator of a series of True and False, like
+                        [T, F, F, T, ...], it can be empty
+
+        => [List] groups: a List of groups, where each group is also a List 
+            of a leading T with subsequent Fs until the next T or end of itTF
+            is reached.
+
+    For example,
+
+    []                  []
+    [F, F]              []
+    [F, T]              [[T]]
+    [F, T, F]           [[T, F]]
+    [T]                 [[T]]
+    [T, F]              [[T, F]]
+    [T, T]              [[T], [T]]
+    [T, F, T]           [[T, F], [T]]
+    [T, F, T, F, F]     [[T, F], [T, F, F]]
+    """
+    return reduce( lambda acc, el: \
+                        acc + [[el]] if el else acc[:-1] + [acc[-1] + [el]]
+                 , dropwhile(lambda el: not el, itTF)
+                 , []
+                 )
+
+
+
+def divideToGroup(func, it):
+    """
+    A more generalized version.
+
+    [Iterator] it: an iterator of elements
+    [Function] func: a function that takes any element from the iterator and
+                    evaluates to either True or False
+
+        => [List] groups: a List of groups, where each group is also an List
+            with a leading element that evaluates to True followed by items that
+            evaluates to False, until the next element that evaluates to True
+            or end of the iterator. 
+
+    For example,
+
+    []                  []
+    [F, F]              []
+    [F, T]              [[T]]
+    [F, T, F]           [[T, F]]
+    [T]                 [[T]]
+    [T, F]              [[T, F]]
+    [T, T]              [[T], [T]]
+    [T, F, T]           [[T, F], [T]]
+    [T, F, T, F, F]     [[T, F], [T, F, F]]
+    """
+    return \
+    reduce( lambda acc, el: \
+                        acc + [[el]] if func(el) else acc[:-1] + [acc[-1] + [el]]
+          , dropwhile(lambda el: not func(el), it)
+          , []
+    )
+
+
+
 if __name__ == '__main__':
-    even = lambda x: x%2 == 0
-    print(divide(even, range(5)))
+    # even = lambda x: x%2 == 0
+    # print(divide(even, range(5)))
 
-	
-
+    itTF = [False, True, False, True]
+    output = divideToGroups(itTF)
+    if output == []:
+        print(output)
+    else:
+        for x in output:
+            print(x)
