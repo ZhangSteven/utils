@@ -64,3 +64,13 @@ def dictToValues(keys, d):
 	retrieve the list of values corresponding to the keys from the dictionary.
 	"""
 	return map(partial(getitem, d), keys)
+
+
+
+"""
+	[Dictionary] d1, [Dictioanry] d2
+		=> [Dictioanry] d (merged dictionary, with all the key value pairs
+							from d1 and d2. If a key is both in d1 and d2,
+							the d2 value will overwrite d1)
+"""
+mergeDict = lambda d1, d2: {**d1, **d2}
