@@ -4,7 +4,7 @@
 import unittest2
 from os.path import join
 from datetime import datetime
-from utils.utility import currentDir, fromExcelOrdinal
+from utils.utility import currentDir, fromExcelOrdinal, allEquals
 from xlrd import open_workbook
 
 
@@ -24,3 +24,12 @@ class TestUtility(unittest2.TestCase):
         self.assertEqual(datetime(2019,2,28), fromExcelOrdinal(ws.cell_value(2, 0)))
         self.assertEqual(datetime(2015,1,10, hour=18, minute=35) \
                         , fromExcelOrdinal(ws.cell_value(3, 0)))
+
+
+
+    def testAllEquals(self):
+        self.assertEqual(True, allEquals([]))
+        self.assertEqual(True, allEquals(['a']))
+        self.assertEqual(True, allEquals([[]]))
+        self.assertEqual(False, allEquals(range(2)))
+        self.assertEqual(True, allEquals(map(lambda x: 0, range(8))))

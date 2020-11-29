@@ -74,3 +74,36 @@ def dictToValues(keys, d):
 							the d2 value will overwrite d1)
 """
 mergeDict = lambda d1, d2: {**d1, **d2}
+
+
+
+def allEquals(it):
+	"""
+	[Iterable] it => [Bool] whether all elements are equal
+
+	Where "it" is iterable, for example a range object or a map object.
+
+	Note iterable and iterator are different. iterable is a property, meaning
+	if an object is iterable, we can use for or map on that object.
+
+	While iterator is an interface, meaning we can apply next() when an object
+	is an iterator.
+
+	Not all iterable objects are iterator, say a range() object is not.
+
+	The function returns True if there is zero or only one element in the
+	iterable. Otherwise it uses the == operator to tell whether all of them
+	are equal.
+
+	The idea of this function comes from here:
+
+	Check if all elements in a list are identical
+	https://stackoverflow.com/a/3844832
+	"""
+	iterator = iter(it)
+	try:
+		first = next(iterator)
+	except StopIteration:
+		return True
+
+	return all(first == el for el in iterator)
